@@ -1,0 +1,38 @@
+# Ignore build artifacts
+target/
+
+# Ignore IDE/project files
+*.iml
+*.idea/
+*.classpath
+*.project
+*.settings/
+.vscode/
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+hs_err_pid*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Documentation / help files
+*.md
+HELP.md
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.swp
+
+# Docker Compose overrides
+docker-compose.override.yml
