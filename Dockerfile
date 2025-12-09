@@ -6,9 +6,9 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 
-FROM eclipse-temurin:21-jdk
+FROM gcr.io/distroless/java21
 
 WORKDIR /cron-validator
-COPY --from=builder /app/target/cron-validator.jar .
+COPY --from=builder /app/target/cron-validator.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar","cron-validator.jar"]
+CMD ["app.jar"]
