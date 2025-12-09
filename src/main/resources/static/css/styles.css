@@ -1,0 +1,130 @@
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: #f2f4f8;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: #fff;
+    width: 460px;
+    padding: 45px 50px; /* Increased spacing */
+    margin-top: 60px;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+    color: #2c3e50;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6c7a91;
+    margin-bottom: 32px;  /* More spacing */
+    font-size: 15px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px; /* Extra spacing between fields */
+}
+
+label {
+    font-size: 14px;
+    color: #4a5568;
+}
+
+input, select {
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    border-color: #4f7cff;
+    outline: none;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 18px; /* More spacing above buttons */
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-weight: 500;
+}
+
+.btn.primary {
+    background: #4f7cff;
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #3b5fd1;
+}
+
+.btn.secondary {
+    background: #2f3640;
+    color: white;
+}
+
+.btn.secondary:hover {
+    background: #1e272e;
+}
+
+/* Result Boxes */
+.result {
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.result.success {
+    background: #e8f3ff;
+    border-left: 4px solid #4f7cff;
+    color: #2d3e50;
+}
+
+.result.error {
+    background: #ffecec;
+    border-left: 4px solid #ff4f4f;
+    color: #b62323;
+}
+
+/* Footer */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #444;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+
+footer a {
+    color: #4f7cff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
