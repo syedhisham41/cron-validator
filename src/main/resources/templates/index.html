@@ -1,64 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Cron Validator</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Cron Validator</h1>
-    <p class="subtitle">Validate or convert cron expressions easily</p>
+        <h1>Cron Validator</h1>
+        <p class="subtitle">A lightweight and reliable cron expression validator.</p>
 
-    <form th:action="@{/process}" method="post" th:object="${cronRequest}" class="cron-form">
+        <form th:action="@{/process}" method="post" th:object="${cronRequest}" class="cron-form">
 
-        <!-- Cron Type -->
-        <div class="field">
-            <label>Cron Type</label>
-            <select th:field="*{cronType}">
-                <option th:value="QUARTZ">QUARTZ</option>
-                <option th:value="UNIX" disabled>UNIX (Coming Soon)</option>
-            </select>
+            <!-- Cron Type -->
+            <div class="field">
+                <label>Cron Type</label>
+                <select th:field="*{cronType}">
+                    <option th:value="QUARTZ">QUARTZ</option>
+                    <option th:value="UNIX" disabled>UNIX (Coming Soon)</option>
+                </select>
+            </div>
+
+            <!-- Cron Expression -->
+            <div class="field">
+                <label>Cron Expression</label>
+                <input type="text" th:field="*{cronExpr}" placeholder="e.g. 0 0/5 * * * ?" required />
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-row">
+                <button type="submit" name="action" value="validate" class="btn primary">
+                    ✔ Validate
+                </button>
+
+                <button type="submit" name="action" value="readable" class="btn secondary">
+                    📖 Human Readable
+                </button>
+            </div>
+        </form>
+
+        <!-- Result -->
+        <div th:if="${result}">
+            <div th:class="'result ' + (${hasError} ? 'error' : 'success')">
+                <p th:text="${result}"></p>
+            </div>
         </div>
 
-        <!-- Cron Expression -->
-        <div class="field">
-            <label>Cron Expression</label>
-            <input type="text" th:field="*{cronExpr}" placeholder="e.g. 0 0/5 * * * ?" required />
-        </div>
-
-        <!-- Buttons -->
-        <div class="button-row">
-            <button type="submit" name="action" value="validate" class="btn primary">
-                ✔ Validate
-            </button>
-
-            <button type="submit" name="action" value="readable" class="btn secondary">
-                📖 Human Readable
-            </button>
-        </div>
-    </form>
-
-    <!-- Result -->
-    <div th:if="${result}">
-        <div th:class="'result ' + (${result.contains('Invalid')} ? 'error' : 'success')">
-            <p th:text="${result}"></p>
-        </div>
     </div>
 
-</div>
+    <!-- Footer -->
+    <footer class="footer-section">
 
-<!-- Footer -->
-<footer>
-    <p>Built by <strong>Said Hisham</strong></p>
-    <p>
-        <a href="https://github.com/syedhisham41/cron-validator" target="_blank">GitHub Repo</a> •
-        <a href="https://linkedin.com/in/syedhisham41" target="_blank">LinkedIn</a>
-    </p>
-</footer>
+        <div class="tech-credit">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" class="spring-icon"
+                alt="Spring Boot">
+            <span>Powered by Spring Boot</span>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://github.com/syedhisham41" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+            </a>
+
+            <a href="https://linkedin.com/in/syedhisham41" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+            </a>
+        </div>
+
+        <p class="footer-note">Engineered By <strong>Said Hisham</strong></p>
+
+    </footer>
+
+
 
 </body>
+
 </html>

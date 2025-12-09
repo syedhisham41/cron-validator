@@ -11,7 +11,7 @@ body {
 .container {
     background: #fff;
     width: 460px;
-    padding: 45px 50px; /* Increased spacing */
+    padding: 45px 50px;
     margin-top: 60px;
     border-radius: 14px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
@@ -27,7 +27,7 @@ h1 {
 .subtitle {
     text-align: center;
     color: #6c7a91;
-    margin-bottom: 32px;  /* More spacing */
+    margin-bottom: 32px;
     font-size: 15px;
 }
 
@@ -35,7 +35,7 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 20px; /* Extra spacing between fields */
+    margin-bottom: 20px;
 }
 
 label {
@@ -59,7 +59,7 @@ input:focus, select:focus {
     display: flex;
     justify-content: space-between;
     gap: 14px;
-    margin-top: 18px; /* More spacing above buttons */
+    margin-top: 18px;
 }
 
 .btn {
@@ -105,26 +105,101 @@ input:focus, select:focus {
 }
 
 .result.error {
-    background: #ffecec;
-    border-left: 4px solid #ff4f4f;
-    color: #b62323;
+    background: #ffe7e7;
+    border-left: 4px solid #ff3535;
+    color: #b31313;
 }
 
 /* Footer */
 footer {
+    margin-top: 50px;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+.badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.badge-row img {
+    height: 22px;
+}
+
+.footer-section {
     margin-top: 40px;
     text-align: center;
+    padding-bottom: 30px;
     color: #444;
     font-size: 14px;
-    padding-bottom: 20px;
 }
 
-footer a {
-    color: #4f7cff;
-    text-decoration: none;
-    font-weight: 500;
+.badge-container {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    gap: 10px;                /* spacing between badges */
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-footer a:hover {
-    text-decoration: underline;
+.badge-container img {
+    height: 24px;
 }
+
+.footer-note {
+    margin-top: 12px;
+    color: #666;
+    font-size: 12px;
+}
+
+.footer-section {
+    margin-top: 40px;
+    text-align: center;
+    padding-bottom: 30px;
+    color: #444;
+    font-size: 14px;
+}
+
+/* --- Spring Boot Credit --- */
+.tech-credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.spring-icon {
+    height: 22px;
+}
+
+/* --- Icon Row --- */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 12px;
+}
+
+.social-icons img {
+    height: 26px;
+    width: 26px;
+    opacity: 0.85;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+}
+
+.social-icons img:hover {
+    transform: scale(1.15);
+    opacity: 1;
+}
+
+.footer-note {
+    margin-top: 8px;
+    color: #666;
+}
+
