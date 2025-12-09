@@ -28,7 +28,6 @@ public class ViewController {
             @RequestParam String action,
             Model model) throws Exception {
 
-        // Determine which service to use
         CronService cronService = cronRequest.getCronType().equals(CronType.QUARTZ)
                 ? new CronQuartzService()
                 : null;
@@ -36,20 +35,24 @@ public class ViewController {
         ViewService viewService = new ViewService(cronService);
 
         String result = "";
+        boolean hasError = false;
 
         if (action.equals("validate")) {
             result = viewService.validateCronExpression(cronRequest);
+            hasError = result.toLowerCase().contains("invalid") || result.toLowerCase().contains("error");
 
         } else if (action.equals("readable")) {
             try {
                 result = viewService.processCronExpression(cronRequest);
             } catch (Exception e) {
+                hasError = true;
                 result = "Error: " + e.getMessage();
             }
         }
 
         model.addAttribute("cronRequest", cronRequest);
         model.addAttribute("result", result);
+        model.addAttribute("hasError", hasError);
 
         return "index";
     }
