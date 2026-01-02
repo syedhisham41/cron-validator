@@ -1,6 +1,6 @@
 package com.syedhisham41.cron_validator.Events.Consumer;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,6 +14,7 @@ import com.syedhisham41.cron_validator.Events.Config.RabbitConfig;
 import com.syedhisham41.cron_validator.Events.Publisher.ResultsEventPublisher;
 import com.syedhisham41.cron_validator.Events.Publisher.StatusEventPublisher;
 import com.syedhisham41.cron_validator.Service.CronService;
+import com.syedhisham41.cron_validator.Service.WorkerRegistrationContext;
 
 @Component
 public class RequestEventConsumer {
@@ -24,11 +25,15 @@ public class RequestEventConsumer {
 
         private final Map<String, CronService> parserServices;
 
+        private final WorkerRegistrationContext context;
+
         public RequestEventConsumer(ResultsEventPublisher resultPublisher,
-                        StatusEventPublisher statusPublisher, Map<String, CronService> parserServices) {
+                        StatusEventPublisher statusPublisher, Map<String, CronService> parserServices,
+                        WorkerRegistrationContext context) {
                 this.resultPublisher = resultPublisher;
                 this.statusPublisher = statusPublisher;
                 this.parserServices = parserServices;
+                this.context = context;
         }
 
         @RabbitListener(queues = RabbitConfig.REQUEST_QUEUE, concurrency = "3-10")
@@ -37,10 +42,10 @@ public class RequestEventConsumer {
                 CronService service = parserServices.get(request.getCronType().toString());
 
                 statusPublisher.publishStatus(new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                StatusTypes.STARTED, Instant.now()));
+                                StatusTypes.STARTED, LocalDateTime.now(), context.getWorkerId().toString()));
 
                 statusPublisher.publishStatus(new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                StatusTypes.IN_PROGRESS, Instant.now()));
+                                StatusTypes.IN_PROGRESS, LocalDateTime.now(), context.getWorkerId().toString()));
 
                 try {
 
@@ -50,20 +55,22 @@ public class RequestEventConsumer {
 
                         statusPublisher.publishStatus(
                                         new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                                        StatusTypes.COMPLETED, Instant.now()));
+                                                        StatusTypes.COMPLETED, LocalDateTime.now(),
+                                                        context.getWorkerId().toString()));
 
                         resultPublisher.publishResult(
                                         new CronEventResponse(request.getJobId(), request.getRequestId(), valid,
-                                                        textSummary, null, Instant.now()));
+                                                        textSummary, null, LocalDateTime.now()));
 
                 } catch (Exception ex) {
                         statusPublisher.publishStatus(
                                         new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                                        StatusTypes.FAILED, Instant.now()));
+                                                        StatusTypes.FAILED, LocalDateTime.now(),
+                                                        context.getWorkerId().toString()));
 
                         resultPublisher.publishResult(
                                         new CronEventResponse(request.getJobId(), request.getRequestId(), false, null,
-                                                        ex.getMessage(), Instant.now()));
+                                                        ex.getMessage(), LocalDateTime.now()));
                 }
 
         }

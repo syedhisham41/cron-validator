@@ -1,6 +1,6 @@
 package com.syedhisham41.cron_validator.DTO;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class CronEventResponse {
 
@@ -14,13 +14,13 @@ public class CronEventResponse {
 
     private String errorMessage;
 
-    private Instant validatedAt;
+    private LocalDateTime validatedAt;
 
     public CronEventResponse() {
     }
 
     public CronEventResponse(String jobId, String requestId, boolean valid, String summary, String errorMessage,
-            Instant validatedAt) {
+            LocalDateTime validatedAt) {
         this.jobId = jobId;
         this.requestId = requestId;
         this.valid = valid;
@@ -69,11 +69,11 @@ public class CronEventResponse {
         this.errorMessage = errorMessage;
     }
 
-    public Instant getValidatedAt() {
+    public LocalDateTime getValidatedAt() {
         return validatedAt;
     }
 
-    public void setValidatedAt(Instant validatedAt) {
+    public void setValidatedAt(LocalDateTime validatedAt) {
         this.validatedAt = validatedAt;
     }
 

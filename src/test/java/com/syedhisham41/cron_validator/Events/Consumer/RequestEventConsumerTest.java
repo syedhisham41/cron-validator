@@ -3,7 +3,7 @@ package com.syedhisham41.cron_validator.Events.Consumer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +46,7 @@ class RequestEventConsumerTest {
                 CronType.QUARTZ.toString(), quartzService
         );
 
-        consumer = new RequestEventConsumer(resultPublisher, statusPublisher, parserMap);
+        consumer = new RequestEventConsumer(resultPublisher, statusPublisher, parserMap, null);
     }
 
     @Test
@@ -57,7 +57,7 @@ class RequestEventConsumerTest {
                 "0 0/5 * * * ?",
                 CronType.QUARTZ,
                 "req-1",
-                Instant.parse("2024-01-01T00:00:00Z")
+                LocalDateTime.parse("2024-01-01T00:00:00")
         );
 
         Mockito.when(quartzService.validate(request.getCronValue()))

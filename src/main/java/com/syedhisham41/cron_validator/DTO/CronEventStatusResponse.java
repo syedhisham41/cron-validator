@@ -1,6 +1,6 @@
 package com.syedhisham41.cron_validator.DTO;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import com.syedhisham41.cron_validator.Constants.StatusTypes;
 
@@ -10,18 +10,22 @@ public class CronEventStatusResponse {
 
     private String requestId;
 
+    private String workerId;
+
     private StatusTypes statusType;
 
-    private Instant updatedAt;
+    private LocalDateTime workerUpdatedAt;
 
     public CronEventStatusResponse() {
     }
 
-    public CronEventStatusResponse(String jobId, String requestId, StatusTypes statusType, Instant updatedAt) {
+    public CronEventStatusResponse(String jobId, String requestId, StatusTypes statusType, LocalDateTime updatedAt,
+            String workerId) {
         this.jobId = jobId;
         this.requestId = requestId;
         this.statusType = statusType;
-        this.updatedAt = updatedAt;
+        this.workerUpdatedAt = updatedAt;
+        this.workerId = workerId;
     }
 
     public String getJobId() {
@@ -30,6 +34,14 @@ public class CronEventStatusResponse {
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    public String getWorkerId() {
+        return workerId;
+    }
+
+    public void setWorkerId(String workerId) {
+        this.workerId = workerId;
     }
 
     public String getRequestId() {
@@ -48,12 +60,12 @@ public class CronEventStatusResponse {
         this.statusType = statusType;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
+    public LocalDateTime getWorkerUpdatedAt() {
+        return workerUpdatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setWorkerUpdatedAt(LocalDateTime updatedAt) {
+        this.workerUpdatedAt = updatedAt;
     }
 
 }

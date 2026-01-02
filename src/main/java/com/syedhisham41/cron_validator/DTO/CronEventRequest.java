@@ -1,6 +1,6 @@
 package com.syedhisham41.cron_validator.DTO;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import com.syedhisham41.cron_validator.Constants.CronType;
 
@@ -14,12 +14,12 @@ public class CronEventRequest {
 
     private String requestId;
 
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     public CronEventRequest() {
     }
 
-    public CronEventRequest(String jobId, String cronValue, CronType cronType, String requestId, Instant createdAt) {
+    public CronEventRequest(String jobId, String cronValue, CronType cronType, String requestId, LocalDateTime createdAt) {
         this.jobId = jobId;
         this.cronValue = cronValue;
         this.cronType = cronType;
@@ -59,11 +59,11 @@ public class CronEventRequest {
         this.requestId = requestId;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
