@@ -28,70 +28,67 @@ import com.syedhisham41.cron_validator.Service.CronService;
 @ExtendWith(MockitoExtension.class)
 class RequestEventConsumerTest {
 
-    @Mock
-    private CronQuartzService quartzService;
+        @Mock
+        private CronQuartzService quartzService;
 
-    @Mock
-    private ResultsEventPublisher resultPublisher;
+        @Mock
+        private ResultsEventPublisher resultPublisher;
 
-    @Mock
-    private StatusEventPublisher statusPublisher;
+        @Mock
+        private StatusEventPublisher statusPublisher;
 
-    private RequestEventConsumer consumer;
+        private RequestEventConsumer consumer;
 
-    @BeforeEach
-    void setup() {
-        // prepare parserServices map
-        Map<String, CronService> parserMap = Map.of(
-                CronType.QUARTZ.toString(), quartzService
-        );
+        @BeforeEach
+        void setup() {
+                // prepare parserServices map
+                Map<String, CronService> parserMap = Map.of(
+                                CronType.QUARTZ.toString(), quartzService);
 
-        consumer = new RequestEventConsumer(resultPublisher, statusPublisher, parserMap, null);
-    }
+                consumer = new RequestEventConsumer(resultPublisher, statusPublisher, parserMap, null);
+        }
 
-    @Test
-    void validateCronEventRequestTest() throws Exception {
+        @Test
+        void validateCronEventRequestTest() throws Exception {
 
-        CronEventRequest request = new CronEventRequest(
-                "job-1",
-                "0 0/5 * * * ?",
-                CronType.QUARTZ,
-                "req-1",
-                LocalDateTime.parse("2024-01-01T00:00:00")
-        );
+                CronEventRequest request = new CronEventRequest(
+                                "job-1",
+                                "0 0/5 * * * ?",
+                                CronType.QUARTZ,
+                                "req-1",
+                                LocalDateTime.parse("2024-01-01T00:00:00"));
 
-        Mockito.when(quartzService.validate(request.getCronValue()))
-               .thenReturn(true);
+                Mockito.when(quartzService.validate(request.getCronValue()))
+                                .thenReturn(true);
 
-        Mockito.when(quartzService.cronToText(request.getCronValue()))
-               .thenReturn("dummy-summary");
+                Mockito.when(quartzService.cronToText(request.getCronValue()))
+                                .thenReturn("dummy-summary");
 
-        consumer.validateCronEventRequest(request);
+                consumer.validateCronEventRequest(request);
 
-        // Capture status events
-        ArgumentCaptor<CronEventStatusResponse> statusCaptor =
-                ArgumentCaptor.forClass(CronEventStatusResponse.class);
+                // Capture status events
+                ArgumentCaptor<CronEventStatusResponse> statusCaptor = ArgumentCaptor
+                                .forClass(CronEventStatusResponse.class);
 
-        Mockito.verify(statusPublisher, Mockito.times(3))
-               .publishStatus(statusCaptor.capture());
+                Mockito.verify(statusPublisher, Mockito.times(3))
+                                .publishStatus(statusCaptor.capture());
 
-        // Check statuses
-        List<CronEventStatusResponse> statuses = statusCaptor.getAllValues();
-        assertEquals(StatusTypes.STARTED, statuses.get(0).getStatusType());
-        assertEquals(StatusTypes.IN_PROGRESS, statuses.get(1).getStatusType());
-        assertEquals(StatusTypes.COMPLETED, statuses.get(2).getStatusType());
+                // Check statuses
+                List<CronEventStatusResponse> statuses = statusCaptor.getAllValues();
+                assertEquals(StatusTypes.STARTED, statuses.get(0).getStatusType());
+                assertEquals(StatusTypes.IN_PROGRESS, statuses.get(1).getStatusType());
+                assertEquals(StatusTypes.COMPLETED, statuses.get(2).getStatusType());
 
-        // Capture final result
-        ArgumentCaptor<CronEventResponse> resultCaptor =
-                ArgumentCaptor.forClass(CronEventResponse.class);
+                // Capture final result
+                ArgumentCaptor<CronEventResponse> resultCaptor = ArgumentCaptor.forClass(CronEventResponse.class);
 
-        Mockito.verify(resultPublisher)
-               .publishResult(resultCaptor.capture());
+                Mockito.verify(resultPublisher)
+                                .publishResult(resultCaptor.capture());
 
-        CronEventResponse result = resultCaptor.getValue();
+                CronEventResponse result = resultCaptor.getValue();
 
-        assertEquals(true, result.isValid());
-        assertEquals("dummy-summary", result.getSummary());
-        assertNull(result.getErrorMessage());
-    }
+                assertEquals(true, result.getPayload().get("valid"));
+                assertEquals("dummy-summary", result.getPayload().get("summary"));
+                assertNull(result.getErrorMessage());
+        }
 }

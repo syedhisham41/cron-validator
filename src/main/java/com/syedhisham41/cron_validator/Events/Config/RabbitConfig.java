@@ -32,33 +32,13 @@ public class RabbitConfig {
 
     @Bean
     public Queue requestsQueue() {
-        return new Queue(REQUEST_QUEUE, false);
+        return new Queue(REQUEST_QUEUE, true);
     }
-
-    // @Bean
-    // public Queue resultsQueue() {
-    //     return new Queue(RESULTS_QUEUE, false);
-    // }
-
-    // @Bean
-    // public Queue statusQueue() {
-    //     return new Queue(STATUS_QUEUE, false);
-    // }
 
     @Bean
     public Binding bindRequestQueue() {
         return BindingBuilder.bind(requestsQueue()).to(cronExchange()).with(REQUEST_KEY);
     }
-
-    // @Bean
-    // public Binding bindResultQueue() {
-    //     return BindingBuilder.bind(resultsQueue()).to(cronExchange()).with(RESULT_KEY);
-    // }
-
-    // @Bean
-    // public Binding bindStatusQueue() {
-    //     return BindingBuilder.bind(statusQueue()).to(cronExchange()).with(STATUS_KEY);
-    // }
 
     @Bean
     public MessageConverter jsonConverter() {

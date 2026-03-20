@@ -1,6 +1,9 @@
 package com.syedhisham41.cron_validator.DTO;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+
+import com.syedhisham41.cron_validator.Constants.ResultTypes;
 
 public class CronEventResponse {
 
@@ -8,25 +11,29 @@ public class CronEventResponse {
 
     private String requestId;
 
-    private boolean valid;
+    private String workerId;
 
-    private String summary;
+    private ResultTypes resultStatus;
+
+    private Map<String, Object> payload;
 
     private String errorMessage;
 
-    private LocalDateTime validatedAt;
+    private LocalDateTime completedAt;
 
     public CronEventResponse() {
     }
 
-    public CronEventResponse(String jobId, String requestId, boolean valid, String summary, String errorMessage,
-            LocalDateTime validatedAt) {
+    public CronEventResponse(String jobId, String requestId, String workerId, ResultTypes resultStatus,
+            Map<String, Object> payload,
+            String errorMessage, LocalDateTime completedAt) {
         this.jobId = jobId;
         this.requestId = requestId;
-        this.valid = valid;
-        this.summary = summary;
+        this.workerId = workerId;
+        this.payload = payload;
         this.errorMessage = errorMessage;
-        this.validatedAt = validatedAt;
+        this.completedAt = completedAt;
+        this.resultStatus = resultStatus;
     }
 
     public String getJobId() {
@@ -37,28 +44,28 @@ public class CronEventResponse {
         this.jobId = jobId;
     }
 
+    public ResultTypes getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(ResultTypes resultStatus) {
+        this.resultStatus = resultStatus;
+    }
+
+    public String getWorkerId() {
+        return workerId;
+    }
+
+    public void setWorkerId(String workerId) {
+        this.workerId = workerId;
+    }
+
     public String getRequestId() {
         return requestId;
     }
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
-    }
-
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     public String getErrorMessage() {
@@ -69,12 +76,20 @@ public class CronEventResponse {
         this.errorMessage = errorMessage;
     }
 
-    public LocalDateTime getValidatedAt() {
-        return validatedAt;
+    public Map<String, Object> getPayload() {
+        return payload;
     }
 
-    public void setValidatedAt(LocalDateTime validatedAt) {
-        this.validatedAt = validatedAt;
+    public void setPayload(Map<String, Object> payload) {
+        this.payload = payload;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
     }
 
 }

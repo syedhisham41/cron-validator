@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import com.syedhisham41.cron_validator.Constants.ResultTypes;
 import com.syedhisham41.cron_validator.Constants.StatusTypes;
 import com.syedhisham41.cron_validator.DTO.CronEventRequest;
 import com.syedhisham41.cron_validator.DTO.CronEventResponse;
@@ -49,28 +50,49 @@ public class RequestEventConsumer {
 
                 try {
 
+                        // try {
+                        // Thread.sleep(30_000);
+                        // } catch (InterruptedException e) {
+                        // Thread.currentThread().interrupt();
+                        // throw new RuntimeException("Worker interrupted", e);
+                        // }
                         boolean valid = service.validate(request.getCronValue());
 
                         String textSummary = service.cronToText(request.getCronValue());
 
-                        statusPublisher.publishStatus(
-                                        new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                                        StatusTypes.COMPLETED, LocalDateTime.now(),
-                                                        context.getWorkerId().toString()));
+                        // CronResultPayload payload = new CronResultPayload(textSummary, valid);
+
+                        Map<String, Object> payload = Map.of(
+                                        "valid", valid,
+                                        "summary", textSummary);
 
                         resultPublisher.publishResult(
-                                        new CronEventResponse(request.getJobId(), request.getRequestId(), valid,
-                                                        textSummary, null, LocalDateTime.now()));
+                                        new CronEventResponse(request.getJobId(), request.getRequestId(),
+                                                        context.getWorkerId().toString(), ResultTypes.SUCCESS, payload,
+                                                        null,
+                                                        LocalDateTime.now()));
+
+                        // statusPublisher.publishStatus(
+                        // new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
+                        // StatusTypes.COMPLETED, LocalDateTime.now(),
+                        // context.getWorkerId().toString()));
 
                 } catch (Exception ex) {
-                        statusPublisher.publishStatus(
-                                        new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
-                                                        StatusTypes.FAILED, LocalDateTime.now(),
-                                                        context.getWorkerId().toString()));
+                        Map<String, Object> payload = Map.of(
+                                        "valid", false,
+                                        "summary", "");
 
                         resultPublisher.publishResult(
-                                        new CronEventResponse(request.getJobId(), request.getRequestId(), false, null,
+                                        new CronEventResponse(request.getJobId(), request.getRequestId(),
+                                                        context.getWorkerId().toString(), ResultTypes.FAILURE,
+                                                        payload,
                                                         ex.getMessage(), LocalDateTime.now()));
+
+                        // statusPublisher.publishStatus(
+                        // new CronEventStatusResponse(request.getJobId(), request.getRequestId(),
+                        // StatusTypes.FAILED, LocalDateTime.now(),
+                        // context.getWorkerId().toString()));
+
                 }
 
         }

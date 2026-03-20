@@ -15,6 +15,7 @@ import org.springframework.web.client.RestClient;
 import com.syedhisham41.cron_validator.Constants.WorkerProperties;
 import com.syedhisham41.cron_validator.DTO.OrchestratorRegisterRequest;
 import com.syedhisham41.cron_validator.DTO.OrchestratorRegisterResponse;
+import com.syedhisham41.cron_validator.InstanceIdentity.InstanceIdentity;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -29,7 +30,7 @@ public class OrchestratorRegisterService {
 
     private final ScheduledExecutorService executorService;
 
-    private WorkerProperties properties;
+    private final WorkerProperties properties;
 
     private RestClient client;
 
@@ -39,13 +40,17 @@ public class OrchestratorRegisterService {
 
     private final WorkerRegistrationContext context;
 
+    private final InstanceIdentity instanceIdentity;
+
     public OrchestratorRegisterService(ScheduledExecutorService executorService, WorkerProperties properties,
-            RestClient.Builder restClientBuilder, WorkerSchemaLoader schemaLoader, WorkerRegistrationContext context) {
+            RestClient.Builder restClientBuilder, WorkerSchemaLoader schemaLoader, WorkerRegistrationContext context,
+            InstanceIdentity instanceIdentity) {
         this.executorService = executorService;
         this.properties = properties;
         this.client = restClientBuilder.build();
         this.schemaLoader = schemaLoader;
         this.context = context;
+        this.instanceIdentity = instanceIdentity;
     }
 
     public void registerWorker() {
@@ -54,7 +59,8 @@ public class OrchestratorRegisterService {
 
             logger.info(
                     "instanceId {} type {} version {} hostname {} concurrency {} heartbeatinterval {} topic {} key {}",
-                    properties.getInstanceId(), properties.getType(), properties.getVersion(), properties.getHostname(),
+                    instanceIdentity.getWorkerInstanceId(), properties.getType(), properties.getVersion(),
+                    instanceIdentity.getWorkerHostName(),
                     properties.getMaxConcurrency(), properties.getHeartBeatIntervalSecs(),
                     properties.getMqRequestExchange(), properties.getMqRequestRouteKey());
 
@@ -63,8 +69,9 @@ public class OrchestratorRegisterService {
             ResponseEntity<OrchestratorRegisterResponse> orchestratorRegisterResponse = client.post()
                     .uri(URI.create(orchestratorUrl + "/api/worker/register"))
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new OrchestratorRegisterRequest(properties.getInstanceId(), properties.getType(),
-                            properties.getVersion(), properties.getHostname(), properties.getMaxConcurrency(),
+                    .body(new OrchestratorRegisterRequest(instanceIdentity.getWorkerInstanceId(), properties.getType(),
+                            properties.getVersion(), instanceIdentity.getWorkerHostName(),
+                            properties.getMaxConcurrency(),
                             properties.getHeartBeatIntervalSecs(), properties.getMqRequestExchange(), "{}",
                             properties.getMqRequestRouteKey(), workerSchema))
                     .retrieve().toEntity(OrchestratorRegisterResponse.class);
@@ -94,7 +101,7 @@ public class OrchestratorRegisterService {
 
     public void sentHeartBeat() {
         try {
-            String heartbeatUrl = "/api/worker/" + properties.getInstanceId() + "/heartbeat";
+            String heartbeatUrl = "/api/worker/" + instanceIdentity.getWorkerInstanceId() + "/heartbeat";
             client.post().uri(URI.create(orchestratorUrl + heartbeatUrl)).retrieve().toBodilessEntity();
             logger.info("heartbeat ..|!!|..");
         } catch (Exception ex) {
