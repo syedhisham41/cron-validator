@@ -10,5 +10,5 @@ FROM gcr.io/distroless/java21
 
 WORKDIR /cron-validator
 COPY --from=builder /app/target/cron-validator.jar app.jar
-EXPOSE 8080
+EXPOSE 8081
 CMD ["app.jar"]
